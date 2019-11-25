@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ProjectId:
+    Type: String
+    Description: projectID used to associate new resources to team members
+
+Resources:
+  apps3sbucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: !Sub '${ProjectId}-apps'
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: true
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: true
+  artifactbucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: !Sub '${ProjectId}-apps-artifact'
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true

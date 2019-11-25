@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ProjectId:
+    Type: String
+    Description: projectID used to associate new resources
+
+Resources:
+  CodeBuildRole:
+    Description: Creating service role in IAM for AWS Lambda
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectId}-CodeBuild-Role'
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [codebuild.amazonaws.com]
+          Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - !Sub 'arn:aws:iam::aws:policy/IAMFullAccess'
+        - !Sub 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
+        - !Sub 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator'
+        - !Sub 'arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess'
+        - !Sub 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+        - !Sub 'arn:aws:iam::aws:policy/AWSLambdaFullAccess'
+        - !Sub 'arn:aws:iam::aws:policy/AWSCodeDeployFullAccess'
+
+  CodeDeployRole:
+    Description: Creating service role in IAM for AWS CodeDeploy
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectId}-CodeDeploy-Role'
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [codedeploy.amazonaws.com]
+          Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSCodeDeployFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda'
+
